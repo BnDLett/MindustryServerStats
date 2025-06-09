@@ -1,0 +1,17 @@
+body {
+    font-size: 24pt;
+}
+
+h1 {font-size: 36pt}
+h2 {font-size: 32pt}
+h3 {font-size: 28pt}
+
+.graphGroupInline {
+    display: block;
+}
+
+.graph {
+    /* height: auto; */
+    background-color: black;
+    max-height: 400pt;
+}

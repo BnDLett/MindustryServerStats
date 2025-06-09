@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="static/general.css" rel="stylesheet">
+</head>
+<body>
+    <h1>{{ server }}</h1>
+    <div class="graphs">
+        <h2>Graphs</h2>
+        <div class="graphGroup">
+            <div class="graphGroup" style="display: flex">
+                <span class="graphContainer">
+                    <div class="graph" id="Players"></div>
+                    <p>Highest: {{ player_max }}</p>
+                </span>
+                <span class="graphContainer">
+                    <div class="graph" id="Latency"></div>
+                    <p>Highest: {{ latency_max }}</p>
+                </span>
+            </div>
+            
+            <span class="graphContainer">
+                <div class="graph" id="Wave"></div>
+                <p>Highest: {{ wave_max }}</p>
+            </span>
+        </div>
+
+        <div class="controlPanel">
+            <h2>Control Panel</h2>
+            <input type="button" value="Reload" onclick="updateAllGraphs(dataTime);">
+
+<!--            <span>-->
+<!--                <input type="checkbox" value="Auto-reload" id="autoReload" onclick="updateAllGraphs(dataTime);">-->
+<!--                <label for="autoReload">Auto-reload</label>-->
+<!--            </span>-->
+        </div>
+    </div>
+
+    <script>
+        var graphs = document.getElementsByClassName("graph")
+
+        for (var i = 0; i < graphs.length; i++) {
+            var element = graphs[i];
+            var titleElement = document.createElement(titleHeader);
+            element.innerHTML = element.id + '<div style="display: flex; justify-content: center; padding-top: 88pt;">Loading...</div>';
+        };
+    </script>
+
+    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+    <script>
+        const titleHeader = "h3";
+        const dataTime = 2_592_000;  // 30 days
+        var autoReload = document.getElementById("autoReload");
+
+        updateAllGraphs(dataTime);
+
+        function ptToPx(pt) {
+            return pt * ( 96 / 72 );
+        }
+
+        function getMax(arr) {
+            var i = arr[0];
+
+            arr.forEach((element) => {
+                if (!element) {return;}
+
+                if (element > i) {i = element;}
+            });
+
+            return i;
+        }
+
+        function plotGraph(graph, raw_data, datapoints_index) {
+            var xArray = raw_data[0];
+            var yArray = raw_data[datapoints_index + 1];
+
+            const data = [{
+                x: xArray,
+                y: yArray,
+                mode: "lines",
+            }];
+            const layout = {
+                height: ptToPx(200),
+
+                yaxis: {
+                    range: [0, getMax(yArray)],
+                    automargin: true,
+                },
+                xaxis: {
+                    automargin: true,
+                },
+
+                font: {
+                    color: "lightgray"
+                },
+                plot_bgcolor: "black",
+                paper_bgcolor: "black"
+            };
+
+            var element = document.getElementById(graph);
+            element.innerHTML = element.id;
+
+            Plotly.newPlot(graph, data, layout);
+        }
+
+        function updateAllGraphs(duration) {
+            fetch("/raw_datapoints?server_hostname=mindustry.ddns.net&seconds_of_data=" + duration, {method: "GET"})
+                .then((response) => response.json())
+                .then((json) => updateWithJson(json));
+        }
+
+        function updateWithJson(json) {
+            var graphs = document.getElementsByClassName("graph")
+
+            for (var i = 0; i < graphs.length; i++) {
+                var element = graphs[i];
+                plotGraph(element.id, json, i)
+            };
+        }
+
+        const interval = setInterval(function() {
+            if (autoReload.checked == false) {return;}
+
+            updateAllGraphs(dataTime);
+        }, 5000);
+    </script>
+</body>
+</html>
