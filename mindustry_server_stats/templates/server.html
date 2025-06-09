@@ -2,14 +2,27 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="static/general.css" rel="stylesheet">
+    <link href="/static/general.css" rel="stylesheet">
+    <!-- <link href="/static/mobile.css" rel="stylesheet"> -->
+    <!-- {{ mobile_css | safe }} -->
+    <title>{{ server_display }} Statistics</title>
+
+    <meta content="{{ server_display }} Statistics" property="og:title" />
+    <meta content="Records:
+    - {{ player_max }} players
+    - {{ latency_max }} ms latency
+    - {{ wave_max }} waves" property="og:description">
+    <meta content="/favicon.ico" property="og:image" />
+    <meta content="#ee6e02" data-react-helmet="true" name="theme-color">
 </head>
 <body>
-    <h1>{{ server }}</h1>
+    <h1>{{ server_display }}</h1>
+    <button onclick="window.location.href = '/'">Back</button>
+    <button onclick="updateAllGraphs(dataTime);">Reload</button>
     <div class="graphs">
         <h2>Graphs</h2>
         <div class="graphGroup">
-            <div class="graphGroup" style="display: flex">
+            <div class="graphGroupInline">
                 <span class="graphContainer">
                     <div class="graph" id="Players"></div>
                     <p>Highest: {{ player_max }}</p>
@@ -26,32 +39,32 @@
             </span>
         </div>
 
-        <div class="controlPanel">
-            <h2>Control Panel</h2>
-            <input type="button" value="Reload" onclick="updateAllGraphs(dataTime);">
+<!--        <div class="controlPanel">-->
+<!--            <h2>Control Panel</h2>-->
+<!--            <button onclick="updateAllGraphs(dataTime);">Reload</button>-->
 
-<!--            <span>-->
-<!--                <input type="checkbox" value="Auto-reload" id="autoReload" onclick="updateAllGraphs(dataTime);">-->
-<!--                <label for="autoReload">Auto-reload</label>-->
-<!--            </span>-->
-        </div>
+<!--&lt;!&ndash;            <span>&ndash;&gt;-->
+<!--&lt;!&ndash;                <input type="checkbox" value="Auto-reload" id="autoReload" onclick="updateAllGraphs(dataTime);">&ndash;&gt;-->
+<!--&lt;!&ndash;                <label for="autoReload">Auto-reload</label>&ndash;&gt;-->
+<!--&lt;!&ndash;            </span>&ndash;&gt;-->
+<!--        </div>-->
     </div>
 
     <script>
+        const titleHeader = "h3";
         var graphs = document.getElementsByClassName("graph")
 
         for (var i = 0; i < graphs.length; i++) {
             var element = graphs[i];
             var titleElement = document.createElement(titleHeader);
-            element.innerHTML = element.id + '<div style="display: flex; justify-content: center; padding-top: 88pt;">Loading...</div>';
+            element.innerHTML = element.id + '<div style="display: flex; justify-content: center; padding-bottom: 88pt; padding-top: 88pt;">Loading...</div>';
         };
     </script>
 
     <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
     <script>
-        const titleHeader = "h3";
         const dataTime = 2_592_000;  // 30 days
-        var autoReload = document.getElementById("autoReload");
+        // var autoReload = document.getElementById("autoReload");
 
         updateAllGraphs(dataTime);
 
@@ -105,7 +118,7 @@
         }
 
         function updateAllGraphs(duration) {
-            fetch("/raw_datapoints?server_hostname=mindustry.ddns.net&seconds_of_data=" + duration, {method: "GET"})
+            fetch("/raw_datapoints/{{ server_id }}?seconds_of_data=" + duration, {method: "GET"})
                 .then((response) => response.json())
                 .then((json) => updateWithJson(json));
         }
@@ -119,11 +132,11 @@
             };
         }
 
-        const interval = setInterval(function() {
-            if (autoReload.checked == false) {return;}
+        // const interval = setInterval(function() {
+        //     if (autoReload.checked == false) {return;}
 
-            updateAllGraphs(dataTime);
-        }, 5000);
+        //     updateAllGraphs(dataTime);
+        // }, 5000);
     </script>
 </body>
 </html>

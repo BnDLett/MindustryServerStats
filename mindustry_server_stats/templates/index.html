@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<html>
+<head>
+    <link href="/static/general.css" rel="stylesheet">
+    <title>Mindustry Server Statistics</title>
+
+    <meta content="Mindustry Server Statistics" property="og:title" />
+    <meta content="Tracking the statistics of {{ count | safe }} Mindustry servers." property="og:description">
+    <meta content="/favicon.ico" property="og:image" />
+    <meta content="#ee6e02" data-react-helmet="true" name="theme-color">
+</head>
+<body>
+    <h1>Mindustry Server Statistics</h1>
+
+    <h2>Contact Me</h2>
+    <div style="margin-left: 1%">
+        <p>Ways to contact me -- whether you want to opt-in or remove your server from being tracked.</p>
+        <!-- <button onclick="window.open('https://discordapp.com/users/388146543842164747', '_blank');">Discord</button> -->
+        <ul>
+            <li>Discord: bndlett</li>
+            <li>Revolt: BnDLett#4190</li>
+        </ul>
+        <p><i>Note: Discord is the preferred communication method.</i></p>
+    </div>
+
+    <h2>Servers</h2>
+    <menu>
+        {{ servers | safe }}
+    </menu>
+</body>
+</html>

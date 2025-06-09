@@ -1,0 +1,104 @@
+@font-face {
+    font-family: mindustry;
+    src: url('mindustry.woff') format('woff');
+}
+
+body {
+    color: rgb(180, 180, 180);
+    background-color: black;
+    font-size: 12pt;
+    font-family: mindustry;
+
+    padding: 1%;
+    margin: 1%;
+}
+
+button {
+    font-size: 12pt;
+    font-family: mindustry;
+
+    color: rgb(180, 180, 180);
+    background-color: rgb(10, 10, 10);
+
+    /* padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 0.5%;
+    padding-bottom: 0.5%; */
+
+    padding: 0.5%;
+
+    /* margin: 1%; */
+    
+    border: 2px;
+    border-radius: 4pt;
+    border-style: solid;
+    border-color: rgb(34, 34, 34);
+}
+
+button:hover {
+    background-color: rgb(30, 30, 30);
+}
+
+h1, h2, h3 {
+    border: 0px;
+    border-bottom: 2px;
+    border-style: solid;
+    border-color: rgb(46, 46, 46);
+    
+    margin: auto;
+    margin-top: 20pt;
+    margin-bottom: 8pt;
+
+    max-width: 99%;
+}
+
+h1 {color: white;}
+h2 {color: rgb(200, 200, 200);}
+h3 {color: rgb(190, 190, 190);}
+
+menu {
+    display: block;
+}
+
+li {
+    list-style-type: none;
+}
+
+.graph {
+    /* height: auto; */
+    background-color: black;
+    max-height: 200pt;
+}
+
+.graphContainer, .server, menu {
+    padding: 1%;
+    margin: 1%;
+
+    border: 2px;
+    border-style: solid;
+    border-radius: 16pt;
+    border-color: rgb(34, 34, 34);
+}
+
+.server {
+    border-radius: 8pt;
+    width: 97%;
+    text-align: left;
+
+    margin-top: 0.25%;
+    margin-bottom: 0.25%;
+}
+
+.graphContainer {
+    display: block;
+    width: 96%;
+}
+
+.graphs {
+    max-width: 100%;
+    /* margin-left: 1%; */
+}
+
+.graphGroupInline {
+    display: flex;
+}
