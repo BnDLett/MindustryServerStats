@@ -61,7 +61,7 @@
         };
     </script>
 
-    <script src="https://cdn.plot.ly/plotly-3.0.1.min.js" charset="utf-8"></script>
+    <script src="https://cdn.plot.ly/plotly-basic-3.0.1.min.js" charset="utf-8"></script>
     <script>
         const dataTime = 2_592_000;  // 30 days
         // var autoReload = document.getElementById("autoReload");
@@ -118,7 +118,10 @@
         }
 
         function updateAllGraphs(duration) {
-            fetch("/raw_datapoints/{{ server_id }}?seconds_of_data=" + duration, {method: "GET"})
+            var url = "https://mindustry-stats-api.lettsn.org/server/{{ server_id }}?from_seconds_ago=" + duration +
+            "&to_seconds_ago=0&resolution=100";
+
+            fetch(url, {method: "GET"})
                 .then((response) => response.json())
                 .then((json) => updateWithJson(json));
         }

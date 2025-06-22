@@ -1,10 +1,10 @@
 import os
 import threading
 import time
-from datetime import datetime
-from itertools import repeat
+from datetime import datetime, UTC
 from multiprocessing import Pool
 from pathlib import Path
+from threading import Thread
 
 from pydustry import Server as MindustryServer
 
@@ -39,21 +39,23 @@ def update_once(server: Server):
     name_index = database.get_names(server.id)[-1].id
     description_index = database.get_descriptions(server.id)[-1].id
 
-    current_time = datetime.now()
-    server_datapoint = datapoint.Datapoint(None, server.id, current_time.timestamp(), name_index,
+    server_datapoint = datapoint.Datapoint(None, server.id, time.time(), name_index,
                                            description_index, server_status.players, server_status.ping,
                                            server_status.wave)
     database.insert_datapoint(server_datapoint)
 
 def periodic_update(duration: int):
     database = Database()
-    pool = Pool()
 
     while True:
         # While this could be outside the loop, doing this can make getting the servers dynamic.
         # Also, it isn't like you're loading hundreds of thousands of entries. *Unlike a certain feature.*
         servers = database.get_servers()
-        pool.map(update_once, servers)
+
+        for server in servers:
+            server_thread = Thread(target=update_once, args=[server], name=f"server_updater_{server.id}")
+            server_thread.start()
+
         time.sleep(duration)
 
 

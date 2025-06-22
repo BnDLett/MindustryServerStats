@@ -82,6 +82,10 @@ class Database:
     def get_servers(self) -> list[Type[server.Server]]:
         return self.fetch_all_into("servers", server.Server)
 
+    def get_server_ids(self) -> list[tuple[int]]:
+        result = self.cursor.execute("SELECT id FROM servers;")
+        return result.fetchall()
+
     def get_server(self, server_id: str) -> Type[server.Server]:
         return self.where_into("servers", server.Server, "id == ?", (server_id,))
 

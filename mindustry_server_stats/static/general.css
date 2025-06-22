@@ -1,6 +1,7 @@
 @font-face {
     font-family: mindustry;
-    src: url('mindustry.woff') format('woff');
+    font-display: swap;
+    src: url('/font') format('woff2');
 }
 
 body {
