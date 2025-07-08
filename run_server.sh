@@ -4,7 +4,7 @@ PORT=$1
 SCRIPT_PATH=$(dirname "$(realpath "$0")")
 APP="mindustry_server_stats:app"
 
-VENV_ALIAS="python3"
+VENV_ALIAS="$SCRIPT_PATH/.venv/bin/python3"
 
 alias venv=$VENV_ALIAS
 
